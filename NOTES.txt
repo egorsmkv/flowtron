@@ -46,9 +46,13 @@ Export MELs (optional, just to check that all works well):
 
 TRAIN
 
-1) Run training in the background 
+1) Run training in the background (1st stage)
 
-    nohup python3 train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1 > training.out 2>&1 &
+    nohup python3 train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1 > training_1st_stage.out 2>&1 &
+
+1.2) Run training in the background (2nd stage)
+
+    nohup python3 train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=0 train_config.checkpoint_path=model_niters > training.out 2>&1 &
 
 2) Run the tesorboard:
 
