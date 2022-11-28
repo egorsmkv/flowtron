@@ -16,5 +16,7 @@ results/
 
 __pycache__/
 
-training.out
+training_1st_stage.out
+training_2nd_stage.out
+
 tensorboard.out
