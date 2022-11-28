@@ -12,3 +12,5 @@ outdir_train_mels/
 models/
 
 results/
+
+__pycache__/
