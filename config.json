@@ -1,6 +1,6 @@
 {
     "train_config": {
-        "output_directory": "/outdir",
+        "output_directory": "/home/yehor/ML/flowtron/outdir",
         "epochs": 10000000,
         "optim_algo": "RAdam",
         "learning_rate": 1e-3,
@@ -24,8 +24,8 @@
         "ctc_loss_start_iter": 10000
     },
     "data_config": {
-        "training_files": "filelists/ljs_audiopaths_text_sid_train_filelist.txt",
-        "validation_files": "filelists/ljs_audiopaths_text_sid_val_filelist.txt",
+        "training_files": "filelists/lada_ukrainian_train_filelist.txt",
+        "validation_files": "filelists/lada_ukrainian_val_filelist.txt",
         "text_cleaners": ["flowtron_cleaners"],
         "p_arpabet": 0.5,
         "cmudict_path": "data/cmudict_dictionary",
@@ -38,7 +38,7 @@
         "max_wav_value": 32768.0,
         "use_attn_prior": true,
         "attn_prior_threshold": 0.0,
-        "prior_cache_path": "/attention_prior_cache",
+        "prior_cache_path": "/home/yehor/ML/flowtron/attention_prior_cache",
         "betab_scaling_factor": 1.0,
         "keep_ambiguous": false
     },

@@ -1,0 +1,7 @@
+dataset_lada_trimmed/
+
+attention_prior_cache/
+outdir/
+
+Pipfile
+Pipfile.lock
