@@ -29,7 +29,11 @@ Export MELs:
 
 Run the tesorboard:
 
-tensorboard --logdir outdir/logs
+    tensorboard --logdir outdir/logs
+
+or 
+
+    nohup tensorboard --logdir outdir/logs &
 
 ====
 
