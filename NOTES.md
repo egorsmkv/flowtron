@@ -25,3 +25,16 @@ Fix error "TypeError: guvectorize() missing 1 required positional argument: 'sig
 Export MELs:
 
     python data.py -c config.json -f filelists/lada_ukrainian_train_filelist.txt -o outdir_train_mels
+
+
+Run the tesorboard:
+
+tensorboard --logdir outdir/logs
+
+====
+
+
+TRAIN
+
+1) python train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1
+
