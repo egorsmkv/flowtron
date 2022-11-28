@@ -15,9 +15,16 @@ Using dataset:
     URL: https://github.com/egorsmkv/ukrainian-tts-datasets/tree/main/lada
     Archive: dataset_lada_trimmed_22khz.zip
 
+    wget https://huggingface.co/datasets/Yehor/ukrainian-tts-lada/resolve/main/dataset_lada_trimmed_22khz.zip
+    unzip dataset_lada_trimmed_22khz.zip
+
 Install Ukrainian G2P:
 
     pip install -U git+https://github.com/egorsmkv/ukro_g2p
+
+Install dependencies:
+
+    pip install -r requirements.txt
 
 Fix error "ModuleNotFoundError: No module named 'numba.decorators'" by :
 
@@ -27,24 +34,26 @@ Fix error "TypeError: guvectorize() missing 1 required positional argument: 'sig
 
     pip install resampy==0.3.1
 
-Export MELs:
+Export MELs (optional, just to check that all works well):
 
-    python data.py -c config.json -f filelists/lada_ukrainian_train_filelist.txt -o outdir_train_mels
-
-
-Run the tesorboard:
-
-    tensorboard --logdir outdir/logs
-
-or 
-
-    nohup tensorboard --logdir outdir/logs &
+    python3 data.py -c config.json -f filelists/lada_ukrainian_train_filelist.txt -o outdir_train_mels
 
 ====
 
 TRAIN
 
-1) python train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1
+1) Run training in the background 
+
+    nohup python3 train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1 > training.out 2>&1 &
+
+2) Run the tesorboard:
+
+    tensorboard --logdir outdir/logs
+
+or 
+
+    nohup tensorboard --logdir outdir/logs > tensorboard.out 2>&1 &
+
 
 ====
 
@@ -56,12 +65,11 @@ python train.py -c config.json -p train_config.ignore_layers=["speaker_embedding
 
 INFERENCE
 
-0) Download waveglow_256channels_ljs_v3.pt
+1) Download waveglow_256channels_ljs_v3.pt
 
+mkdir models
 cd models
 curl -LO 'https://api.ngc.nvidia.com/v2/models/nvidia/waveglow_ljs_256channels/versions/3/files/waveglow_256channels_ljs_v3.pt'
-
-1) Download https://drive.google.com/file/d/1rpK8CzAAirq9sWZhe9nlfvxMF1dRgFbF/view
 
 2) Copy the checkpoint to models folder
 
@@ -73,6 +81,19 @@ python inference.py --eng 0 -c config.json -f models/flowtron_lada.pt -w models/
 
 ---
 
-Original:
+Inference using English model:
 
-python inference.py -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_ljs_v3.pt -t "You initialise a random tenor at the start of" -i 0
+1) Install gdown
+
+    pip install gdown
+
+2) Download flowtron_ljs.pt
+
+    cd models
+    ~/.local/bin/gdown --fuzzy "https://drive.google.com/file/d/1Cjd6dK_eFz6DE0PKXKgKxrzTUqzzUDW-/view"
+
+3) Do inference 
+
+    python3 inference.py -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_ljs_v3.pt -t "You initialise a random tenor at the start of" -i 0
+
+Results are in the results folder
