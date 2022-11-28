@@ -39,6 +39,11 @@ TRAIN
 1) python train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1
 
 
+====
+
+TRAIN FROM A CHECKPOINT
+
+python train.py -c config.json -p train_config.ignore_layers=["speaker_embedding.weight"] train_config.checkpoint_path="models/flowtron_ljs.pt"
 
 ====
 

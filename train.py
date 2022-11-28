@@ -110,7 +110,15 @@ def warmstart(checkpoint_path, model, include_layers=None):
 def load_checkpoint(checkpoint_path, model, optimizer, ignore_layers=[]):
     assert os.path.isfile(checkpoint_path)
     checkpoint_dict = torch.load(checkpoint_path, map_location='cpu')
-    iteration = checkpoint_dict['iteration']
+
+    # https://github.com/NVIDIA/flowtron/issues/116#issuecomment-818464507
+    try:
+        iteration = checkpoint_dict['iteration']
+        model_dict = checkpoint_dict['model'].state_dict()
+    except:
+        iteration = 1
+        model_dict = checkpoint_dict['state_dict']
+
     model_dict = checkpoint_dict['model'].state_dict()
 
     if len(ignore_layers) > 0:
