@@ -13,3 +13,15 @@ Using dataset:
 Install Ukrainian G2P:
 
     pip install -U git+https://github.com/egorsmkv/ukro_g2p
+
+Fix error "ModuleNotFoundError: No module named 'numba.decorators'" by :
+
+    pip install numba==0.48
+
+Fix error "TypeError: guvectorize() missing 1 required positional argument: 'signature'" by :
+
+    pip install resampy==0.3.1
+
+Export MELs:
+
+    python data.py -c config.json -f filelists/lada_ukrainian_train_filelist.txt -o outdir_train_mels

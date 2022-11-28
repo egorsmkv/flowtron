@@ -26,6 +26,7 @@ from scipy.io.wavfile import read
 from scipy.stats import betabinom
 from audio_processing import TacotronSTFT
 from text import text_to_sequence, cmudict, _clean_text, get_arpabet
+from ukro_g2p.predict import G2P
 
 
 def beta_binomial_prior_distribution(phoneme_count, mel_count,
@@ -54,6 +55,30 @@ def load_wav_to_torch(full_path):
     """ Loads wavdata into torch array """
     sampling_rate, data = read(full_path)
     return torch.from_numpy(data).float(), sampling_rate
+
+
+g2p = G2P('ukro-base-uncased', cpu=True)
+
+def get_phonemes(text):
+    words = text.lower().split(' ')
+
+    words_phonemes = []
+    for word in words:
+        word_no_accent = [it for it in word if it != '́']
+        word_no_accent = [it for it in word_no_accent if it != '—']
+        word_no_accent = [it for it in word_no_accent if it != '?']
+        word_no_accent = [it for it in word_no_accent if it != '!']
+        word_no_accent = [it for it in word_no_accent if it != ':']
+        word_no_accent = [it for it in word_no_accent if it != '.']
+        word_no_accent = [it for it in word_no_accent if it != ',']
+        if not word_no_accent:
+            continue
+
+        phonemes = g2p(word_no_accent)
+
+        words_phonemes.append(''.join(phonemes))
+    
+    return ' '.join(words_phonemes)
 
 
 class Data(torch.utils.data.Dataset):
@@ -159,10 +184,7 @@ class Data(torch.utils.data.Dataset):
 
     def get_text(self, text):
         text = _clean_text(text, self.text_cleaners)
-        words = re.findall(r'\S*\{.*?\}\S*|\S+', text)
-        text = ' '.join([get_arpabet(word, self.cmudict)
-                         if random.random() < self.p_arpabet else word
-                         for word in words])
+        text = get_phonemes(text)
         text_norm = torch.LongTensor(text_to_sequence(text))
         return text_norm
 
@@ -263,6 +285,11 @@ if __name__ == "__main__":
     with open(args.config) as f:
         data = f.read()
     data_config = json.loads(data)["data_config"]
+
+    data_config = dict((k, v) for k, v in data_config.items() if k not in ['training_files', 'validation_files'])
+
+    data_config['filelist_path'] = args.filelist
+
     mel2samp = Data(**data_config)
 
     # Make directory if it doesn't exist
