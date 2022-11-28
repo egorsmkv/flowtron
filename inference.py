@@ -38,7 +38,7 @@ from scipy.io.wavfile import write
 
 
 def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
-          sigma, gate_threshold, seed):
+          sigma, gate_threshold, seed, eng):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
@@ -61,7 +61,12 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
         data_config['training_files'],
         **dict((k, v) for k, v in data_config.items() if k not in ignore_keys))
     speaker_vecs = trainset.get_speaker_id(speaker_id).cuda()
-    text = trainset.get_text(text).cuda()
+
+    if eng == 1:
+        text = trainset.get_eng_text(text).cuda()
+    else:
+        text = trainset.get_text(text).cuda()
+
     speaker_vecs = speaker_vecs[None]
     text = text[None]
 
@@ -73,8 +78,8 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
     for k in range(len(attentions)):
         attention = torch.cat(attentions[k]).cpu().numpy()
         fig, axes = plt.subplots(1, 2, figsize=(16, 4))
-        axes[0].imshow(mels[0].cpu().numpy(), origin='bottom', aspect='auto')
-        axes[1].imshow(attention[:, 0].transpose(), origin='bottom', aspect='auto')
+        axes[0].imshow(mels[0].cpu().numpy(), origin='upper', aspect='auto')
+        axes[1].imshow(attention[:, 0].transpose(), origin='upper', aspect='auto')
         fig.savefig(os.path.join(output_dir, 'sid{}_sigma{}_attnlayer{}.png'.format(speaker_id, sigma, k)))
         plt.close("all")
 
@@ -107,6 +112,7 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--sigma", default=0.5, type=float)
     parser.add_argument("-g", "--gate", default=0.5, type=float)
     parser.add_argument("--seed", default=1234, type=int)
+    parser.add_argument("--eng", default=1, type=int)
     args = parser.parse_args()
 
     # Parse configs.  Globals nicer in this case
@@ -129,4 +135,4 @@ if __name__ == "__main__":
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = False
     infer(args.flowtron_path, args.waveglow_path, args.output_dir, args.text,
-          args.id, args.n_frames, args.sigma, args.gate, args.seed)
+          args.id, args.n_frames, args.sigma, args.gate, args.seed, args.eng)

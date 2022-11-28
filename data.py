@@ -181,6 +181,15 @@ class Data(torch.utils.data.Dataset):
 
     def get_speaker_id(self, speaker_id):
         return torch.LongTensor([self.speaker_ids[int(speaker_id)]])
+    
+    def get_eng_text(self, text):
+        text = _clean_text(text, self.text_cleaners)
+        words = re.findall(r'\S*\{.*?\}\S*|\S+', text)
+        text = ' '.join([get_arpabet(word, self.cmudict)
+                         if random.random() < self.p_arpabet else word
+                         for word in words])
+        text_norm = torch.LongTensor(text_to_sequence(text))
+        return text_norm
 
     def get_text(self, text):
         text = _clean_text(text, self.text_cleaners)

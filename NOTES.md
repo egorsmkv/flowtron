@@ -3,7 +3,7 @@ Python: 3.8.13
 
 torch is installed:
 
-    pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+    pip install torch==1.7.1+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
 
 Using dataset:
 
@@ -52,4 +52,11 @@ cp outdir/model_0 models/flowtron_lada.pt
 
 3) Run it
 
-python inference.py -c config.json -f models/flowtron_lada.pt -w models/waveglow_256channels_universal_v5.pt -t "Добрий день!" -i 0
+python inference.py --eng 0 -c config.json -f models/flowtron_lada.pt -w models/waveglow_256channels_universal_v5.pt -t "Добрий день!" -i 0
+
+---
+
+Original:
+
+python inference.py -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_universal_v5.pt -t "It is well know that deep generative models have a rich latent space!" -i 0
+
