@@ -56,7 +56,7 @@ curl -LO 'https://api.ngc.nvidia.com/v2/models/nvidia/waveglow_ljs_256channels/v
 
 2) Copy the checkpoint to models folder
 
-cp outdir/model_0 models/flowtron_lada.pt
+cp outdir/model_1000 models/flowtron_lada.pt
 
 3) Run it
 

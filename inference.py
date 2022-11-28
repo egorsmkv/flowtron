@@ -51,7 +51,13 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
 
     # load flowtron
     model = Flowtron(**model_config).cuda()
-    state_dict = torch.load(flowtron_path, map_location='cpu')['state_dict']
+
+    try:
+        # https://github.com/NVIDIA/flowtron/issues/37#issuecomment-650133863
+        state_dict = torch.load(flowtron_path, map_location='cpu')["model"].state_dict()
+    except KeyError:
+        state_dict = torch.load(flowtron_path, map_location='cpu')['state_dict']
+
     model.load_state_dict(state_dict)
     model.eval()
     print("Loaded checkpoint '{}')" .format(flowtron_path))
