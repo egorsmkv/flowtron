@@ -38,3 +38,18 @@ TRAIN
 
 1) python train.py -c config.json -p train_config.output_directory=outdir data_config.use_attn_prior=1
 
+
+
+====
+
+INFERENCE
+
+1) Download https://drive.google.com/file/d/1rpK8CzAAirq9sWZhe9nlfvxMF1dRgFbF/view
+
+2) Copy the checkpoint to models folder
+
+cp outdir/model_0 models/flowtron_lada.pt
+
+3) Run it
+
+python inference.py -c config.json -f models/flowtron_lada.pt -w models/waveglow_256channels_universal_v5.pt -t "Добрий день!" -i 0

@@ -7,3 +7,7 @@ Pipfile
 Pipfile.lock
 
 outdir_train_mels/
+
+models/
+
+results/
