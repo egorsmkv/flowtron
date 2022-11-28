@@ -1,4 +1,5 @@
 My GPU: NVIDIA RTX A4000
+Python: 3.8.13
 
 torch is installed:
 
