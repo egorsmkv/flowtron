@@ -119,8 +119,6 @@ def load_checkpoint(checkpoint_path, model, optimizer, ignore_layers=[]):
         iteration = 1
         model_dict = checkpoint_dict['state_dict']
 
-    model_dict = checkpoint_dict['model'].state_dict()
-
     if len(ignore_layers) > 0:
         model_dict = {k: v for k, v in model_dict.items()
                       if k not in ignore_layers}
