@@ -1,14 +1,18 @@
 My GPU: NVIDIA RTX A4000
 Python: 3.8.13
 
-system packages:
+Install system packages:
 
     sudo apt update
     sudo apt install python3-pip
 
-torch is installed:
+Install PyTorch:
 
     pip install torch==1.7.1+cu110 torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+
+Init modules:
+
+    git submodule update --init; cd tacotron2; git submodule update --init
 
 Using dataset:
 
