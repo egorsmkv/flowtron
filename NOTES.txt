@@ -60,7 +60,7 @@ TRAIN
 
 or 
 
-    nohup tensorboard --logdir outdir/logs > tensorboard.out 2>&1 &
+    nohup tensorboard --bind_all --logdir outdir/logs > tensorboard.out 2>&1 &
 
 
 ====
