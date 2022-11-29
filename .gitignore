@@ -20,3 +20,8 @@ training_1st_stage.out
 training_2nd_stage.out
 
 tensorboard.out
+
+waveglow_256channels_ljs_v3.pt
+waveglow_256channels_universal_v5.pt
+
+model_*

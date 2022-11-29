@@ -38,13 +38,15 @@ from scipy.io.wavfile import write
 
 
 def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
-          sigma, gate_threshold, seed, eng):
+          sigma, gate_threshold, seed, eng, fp16):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
     # load waveglow
     waveglow = torch.load(waveglow_path)['model'].cuda().eval()
-    waveglow.cuda().half()
+    if fp16:
+        waveglow.cuda().half()
+
     for k in waveglow.convinv:
         k.float()
     waveglow.eval()
@@ -90,7 +92,10 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
         plt.close("all")
 
     with torch.no_grad():
-        audio = waveglow.infer(mels.half(), sigma=0.8).float()
+        if fp16:
+            audio = waveglow.infer(mels.half(), sigma=0.8).float()
+        else:
+            audio = waveglow.infer(mels, sigma=0.8).float()
 
     audio = audio.cpu().numpy()[0]
     # normalize audio for now
@@ -119,6 +124,7 @@ if __name__ == "__main__":
     parser.add_argument("-g", "--gate", default=0.5, type=float)
     parser.add_argument("--seed", default=1234, type=int)
     parser.add_argument("--eng", default=1, type=int)
+    parser.add_argument("--fp16", default=1, type=int)
     args = parser.parse_args()
 
     # Parse configs.  Globals nicer in this case
@@ -140,5 +146,6 @@ if __name__ == "__main__":
 
     torch.backends.cudnn.enabled = True
     torch.backends.cudnn.benchmark = False
+    
     infer(args.flowtron_path, args.waveglow_path, args.output_dir, args.text,
-          args.id, args.n_frames, args.sigma, args.gate, args.seed, args.eng)
+          args.id, args.n_frames, args.sigma, args.gate, args.seed, args.eng, args.fp16)
