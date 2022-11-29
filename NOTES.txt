@@ -104,4 +104,11 @@ Inference using English model:
 
     python3 inference.py -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_ljs_v3.pt -t "You initialise a random tenor at the start of" -i 0
 
+    Change the sigma:
+
+    python3 inference.py --sigma 0 -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_ljs_v3.pt -t "You initialise a random tenor at the start of" -i 0
+
+    python3 inference.py --sigma 1 -c config.json -f models/flowtron_ljs.pt -w models/waveglow_256channels_ljs_v3.pt -t "You initialise a random tenor at the start of" -i 0
+
+
 Results are in the results folder
