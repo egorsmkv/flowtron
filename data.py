@@ -80,6 +80,7 @@ def get_phonemes(text):
         word_no_accent = word_no_accent.replace('{', '').replace('}', '')
 
         try:
+            word_no_accent = word_no_accent.lower()
             phonemes = g2p(word_no_accent)
 
             words_phonemes.append(''.join(phonemes))
