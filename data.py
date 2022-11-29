@@ -199,12 +199,25 @@ class Data(torch.utils.data.Dataset):
                          for word in words])
         text_norm = torch.LongTensor(text_to_sequence(text))
         return text_norm
+    
+    def get_eng_phonemes(self, text):
+        text = _clean_text(text, self.text_cleaners)
+        words = re.findall(r'\S*\{.*?\}\S*|\S+', text)
+        text = ' '.join([get_arpabet(word, self.cmudict)
+                         if random.random() < self.p_arpabet else word
+                         for word in words])
+        return text
 
     def get_text(self, text):
         # text = _clean_text(text, self.text_cleaners)
         text = get_phonemes(text)
         text_norm = torch.LongTensor(text_to_sequence(text))
         return text_norm
+
+    def get_ukr_phonemes(self, text):
+        # text = _clean_text(text, self.text_cleaners)
+        text = get_phonemes(text)
+        return text
 
     def __getitem__(self, index):
         # Read audio and text

@@ -30,6 +30,7 @@ from flowtron import Flowtron
 from torch.utils.data import DataLoader
 from data import Data
 from train import update_params
+from text import sequence_to_text
 
 sys.path.insert(0, "tacotron2")
 sys.path.insert(0, "tacotron2/waveglow")
@@ -71,8 +72,12 @@ def infer(flowtron_path, waveglow_path, output_dir, text, speaker_id, n_frames,
     speaker_vecs = trainset.get_speaker_id(speaker_id).cuda()
 
     if eng == 1:
+        print('PHONEMES:')
+        print(trainset.get_eng_phonemes(text))
         text = trainset.get_eng_text(text).cuda()
     else:
+        print('PHONEMES:')
+        print(trainset.get_ukr_phonemes(text))
         text = trainset.get_text(text).cuda()
 
     speaker_vecs = speaker_vecs[None]
