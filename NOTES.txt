@@ -97,6 +97,10 @@ python3 inference.py --eng 0 -c config.json -f models/flowtron_lada.pt -w models
 
     python3 inference.py --eng 0 --fp16 0 --sigma 0.5 -c config.json -f model_83000 -w waveglow_256channels_universal_v5.pt -t "Підлога країни без електрохарчування" -i 0
 
+5) Inference with additional phonemes
+
+    python3 inference.py --eng 0 --sigma 0.6 -c config.json -f model_92000 -w waveglow_256channels_ljs_v3.pt -t "це тест {NEH HRUHB2IYYAA1NJTEIH PRAOMAO1VIHELAA VAO1NAA NAAREH1SHTJIY}" -i 0
+
 ---
 
 Inference using English model:

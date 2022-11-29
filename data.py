@@ -60,7 +60,7 @@ def load_wav_to_torch(full_path):
 g2p = G2P('ukro-base-uncased', cpu=True)
 
 def get_phonemes(text):
-    words = text.lower().split(' ')
+    words = text.split(' ')
 
     words_phonemes = []
     for word in words:
@@ -71,12 +71,20 @@ def get_phonemes(text):
         word_no_accent = [it for it in word_no_accent if it != ':']
         word_no_accent = [it for it in word_no_accent if it != '.']
         word_no_accent = [it for it in word_no_accent if it != ',']
+
         if not word_no_accent:
             continue
+        
+        word_no_accent = ''.join(word_no_accent)
 
-        phonemes = g2p(word_no_accent)
+        word_no_accent = word_no_accent.replace('{', '').replace('}', '')
 
-        words_phonemes.append(''.join(phonemes))
+        try:
+            phonemes = g2p(word_no_accent)
+
+            words_phonemes.append(''.join(phonemes))
+        except KeyError:
+            words_phonemes.append(word_no_accent)
     
     return ' '.join(words_phonemes)
 
@@ -192,7 +200,7 @@ class Data(torch.utils.data.Dataset):
         return text_norm
 
     def get_text(self, text):
-        text = _clean_text(text, self.text_cleaners)
+        # text = _clean_text(text, self.text_cleaners)
         text = get_phonemes(text)
         text_norm = torch.LongTensor(text_to_sequence(text))
         return text_norm
