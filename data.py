@@ -79,13 +79,13 @@ def get_phonemes(text):
 
         word_no_accent = word_no_accent.replace('{', '').replace('}', '')
 
-        try:
+        if word_no_accent.isupper():
+            words_phonemes.append(word_no_accent)
+        else:
             word_no_accent = word_no_accent.lower()
             phonemes = g2p(word_no_accent)
 
             words_phonemes.append(''.join(phonemes))
-        except KeyError:
-            words_phonemes.append(word_no_accent)
     
     return ' '.join(words_phonemes)
 
